@@ -1,3 +1,5 @@
+const pollHandler = require("./pollResponses.js");
+
 const users = {};
 
 // Helper method sending JSON response with a body
@@ -23,6 +25,20 @@ const getUsers = (request, response, isHead = false) => {
   const responseJSON = {
     users,
   };
+
+  return respondJSON(request, response, 200, responseJSON);
+};
+
+// Returns an object of all poll objects
+const getPolls = (request, response, isHead=false) => {
+  // Check if a HEAD request was made, if so just send the status code
+  if (isHead === true) {
+    return respondJSONMeta(request, response, 200);
+  }
+
+  const responseJSON = {
+    polls: pollHandler.getPolls(),
+  }
 
   return respondJSON(request, response, 200, responseJSON);
 };
@@ -58,6 +74,32 @@ const addUser = (request, response, body) => {
   }
 
   return respondJSONMeta(request, response, responseCode);
+};
+
+// 
+const addPoll = (request, response, body) => {
+  const responseJSON = {
+    message: 'You must include at least 2 options with your poll',
+  };
+
+  // Make sure that
+  for(let opt in body.options){
+    if(!opt || opt === "" || opt === null){
+      response.id = "missingOption";
+      return respondJSON(request, response, 400, responseJSON);
+    }
+  }
+
+  let responseCode = 201;
+  const existingPolls = pollHandler.getPolls();
+
+  if(existingPolls[body.name]) {
+    responseCode = 204;
+  } else {
+    existingPolls[body.name] = {};
+  }
+
+
 };
 
 // Returns response for if the requested page does not exist
