@@ -91,15 +91,25 @@ const addPoll = (request, response, body) => {
   }
 
   let responseCode = 201;
-  const existingPolls = pollHandler.getPolls();
 
-  if(existingPolls[body.name]) {
-    responseCode = 204;
-  } else {
-    existingPolls[body.name] = {};
+  // const existingPolls = pollHandler.getPolls();
+
+  // if(existingPolls[body.name]) {
+  //   responseCode = 204;
+  // } else {
+  //   // Set data for new poll
+
+  // }
+
+  // Create the new poll, will return appropriate response code
+  responseCode = pollHandler.addPoll(body.name, body.size, body.options);
+
+  if(responseCode === 201) {
+    responseJSON.message = 'Created Successfully';
+    return respondJSON(request, response, responseCode, responseJSON);
   }
-
-
+  
+  return respondJSONMeta(request, response, responseCode);
 };
 
 // Returns response for if the requested page does not exist
