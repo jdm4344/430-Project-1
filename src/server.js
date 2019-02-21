@@ -8,7 +8,7 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 // Handles POST request for creating or updateing users
 const handlePost = (request, response, parsedUrl) => {
-  if (parsedUrl.pathname === '/addUser') {
+  if (parsedUrl.pathname === '/addPoll') {
     const body = [];
 
     request.on('error', (err) => {
@@ -25,7 +25,7 @@ const handlePost = (request, response, parsedUrl) => {
       const bodyString = Buffer.concat(body).toString();
       const bodyParams = query.parse(bodyString);
       // console.dir(bodyParams);
-      jsonHandler.addUser(request, response, bodyParams);
+      jsonHandler.addPoll(request, response, bodyParams);
     });
   }
 };
@@ -36,8 +36,8 @@ const handleGet = (request, response, parsedUrl) => {
     htmlHandler.getIndex(request, response);
   } else if (parsedUrl.pathname === '/style.css') {
     htmlHandler.getCSS(request, response);
-  } else if (parsedUrl.pathname === '/getUsers') {
-    jsonHandler.getUsers(request, response);
+  } else if (parsedUrl.pathname === '/getPolls') {
+    jsonHandler.getPolls(request, response);
   } else {
     jsonHandler.notFound(request, response);
   }
@@ -45,8 +45,8 @@ const handleGet = (request, response, parsedUrl) => {
 
 // Handles head requests
 const handleHead = (request, response, parsedUrl) => {
-  if (parsedUrl.pathname === '/getUsers') {
-    jsonHandler.getUsers(request, response, true);
+  if (parsedUrl.pathname === '/getPoll') {
+    jsonHandler.getPolls(request, response, true);
   } else {
     jsonHandler.notFound(request, response, true);
   }

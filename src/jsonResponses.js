@@ -1,6 +1,4 @@
-const pollHandler = require("./pollResponses.js");
-
-const users = {};
+const pollHandler = require('./pollResponses.js');
 
 // Helper method sending JSON response with a body
 const respondJSON = (request, response, status, object) => {
@@ -15,22 +13,8 @@ const respondJSONMeta = (request, response, status) => {
   response.end();
 };
 
-// Returns the users object as a response
-const getUsers = (request, response, isHead = false) => {
-  // Check if a HEAD request was made, if so just send the status code
-  if (isHead === true) {
-    return respondJSONMeta(request, response, 200);
-  }
-  // Else, return the users object
-  const responseJSON = {
-    users,
-  };
-
-  return respondJSON(request, response, 200, responseJSON);
-};
-
 // Returns an object of all poll objects
-const getPolls = (request, response, isHead=false) => {
+const getPolls = (request, response, isHead = false) => {
   // Check if a HEAD request was made, if so just send the status code
   if (isHead === true) {
     return respondJSONMeta(request, response, 200);
@@ -38,77 +22,40 @@ const getPolls = (request, response, isHead=false) => {
 
   const responseJSON = {
     polls: pollHandler.getPolls(),
-  }
+  };
 
   return respondJSON(request, response, 200, responseJSON);
 };
 
-// Returns response based on new or updated user
-const addUser = (request, response, body) => {
-  const responseJSON = {
-    message: 'Name and age are both required',
-  };
-
-  // Check if a name and age were sent
-  if (!body.name || !body.age) {
-    responseJSON.id = 'missingParams';
-    return respondJSON(request, response, 400, responseJSON);
-  }
-
-  let responseCode = 201;
-
-  // Check if the user already exists
-  if (users[body.name]) {
-    responseCode = 204;
-  } else {
-    users[body.name] = {};
-  }
-
-  users[body.name].name = body.name;
-  users[body.name].age = body.age;
-
-  // Created a new user
-  if (responseCode === 201) {
-    responseJSON.message = 'Created Successfully';
-    return respondJSON(request, response, responseCode, responseJSON);
-  }
-
-  return respondJSONMeta(request, response, responseCode);
-};
-
-// 
+// Creates a new poll or updates an existing one
+// body is an object with the keys: name, size, and options
+// options is an array of strings which name an option that can be chosen in a poll
 const addPoll = (request, response, body) => {
   const responseJSON = {
     message: 'You must include at least 2 options with your poll',
   };
 
-  // Make sure that
-  for(let opt in body.options){
-    if(!opt || opt === "" || opt === null){
-      response.id = "missingOption";
+  // Make sure that all options have been filled out
+  const { local: options } = body.options; // use "object desctructuring" to prevent eslint error
+
+  for (let i = 0; i < body.size; i++) {
+    if (!options[i] || options[i] === '' || options[i] === null) {
+      response.id = 'missingOption';
       return respondJSON(request, response, 400, responseJSON);
     }
   }
 
   let responseCode = 201;
 
-  // const existingPolls = pollHandler.getPolls();
-
-  // if(existingPolls[body.name]) {
-  //   responseCode = 204;
-  // } else {
-  //   // Set data for new poll
-
-  // }
-
-  // Create the new poll, will return appropriate response code
+  // Create the new poll
+  // pollHandler determines whether to create or update, will return appropriate response code
   responseCode = pollHandler.addPoll(body.name, body.size, body.options);
 
-  if(responseCode === 201) {
+  if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';
     return respondJSON(request, response, responseCode, responseJSON);
   }
-  
+
   return respondJSONMeta(request, response, responseCode);
 };
 
@@ -125,7 +72,7 @@ const notFound = (request, response, isHead = false) => {
 };
 
 module.exports = {
-  getUsers,
-  addUser,
+  getPolls,
+  addPoll,
   notFound,
 };
