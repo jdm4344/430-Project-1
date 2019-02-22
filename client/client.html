@@ -17,6 +17,7 @@
     const handleResponse = (xhr, parseResponse=true) => {
       const content = document.querySelector('#content');
       let json = "";
+      let size = 0;
 
       // Handle responses without a body
       if(parseResponse && xhr.status != 204) {
@@ -58,7 +59,7 @@
     const sendPost = (e, pollForm) => {  
       const nameField = pollForm.querySelector("#nameField");
 
-      let size = pollform.getElementById("optionList").getElementsByTagName("li").length;
+      
       console.log(size);
 
       const xhr = new XMLHttpRequest();
@@ -67,7 +68,9 @@
       xhr.setRequestHeader("Accept", "application/json");
       xhr.onload = () => handleResponse(xhr);
 
-      const formData = `name=${nameField.value}&size=2&options=${["Option 1", "Option 2"]}`;
+      let test = ["option 1", "option 2", "option 3"];
+
+      const formData = `name=${nameField.value}&size=${size}&options=${test}`;
 
       xhr.send(formData);
       
@@ -106,6 +109,8 @@
       let newInp = document.createElement("input");
       newOpt.appendChild(newInp);
       optionList.appendChild(newOpt);
+
+      size = pollform.getElementById("optionList").getElementsByTagName("li").length;
     };
 
     // Attach listeners to elements

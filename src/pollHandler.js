@@ -1,7 +1,7 @@
 const polls = {};
 
 // Creates a new poll and saves it to the polls object
-const addPoll = (name, size = 2, options) => {
+const addPoll = (name, size, options) => {
   let responseCode = 201;
 
   // Check if a poll with the given name already exists, if not create a new poll
@@ -17,7 +17,7 @@ const addPoll = (name, size = 2, options) => {
   // Assign values to poll
   // Make sure a name was given, if not generate one
   if (!name || name === null || name === '') {
-    polls[name].name = `Poll #${Object.keys(polls).length + 1}`;
+    polls[name].name = `Poll #${Object.keys(polls).length}`;
   } else {
     polls[name].name = name;
   }

@@ -24,8 +24,8 @@ const handlePost = (request, response, parsedUrl) => {
     request.on('end', () => {
       const bodyString = Buffer.concat(body).toString();
       const bodyParams = query.parse(bodyString);
-      console.dir(bodyParams);
-      jsonHandler.addPoll(request, response, bodyParams);
+      // console.dir(bodyParams);
+      jsonHandler.addPoll(bodyParams.name, bodyParams.size, bodyParams.options);
     });
   }
 };
