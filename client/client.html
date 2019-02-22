@@ -55,20 +55,19 @@
     };
 
     // Sends a POST request to the server
-    const sendPost = (e, nameForm) => {  
-      const nameAction = nameForm.getAttribute("action");
-      const nameMethod = nameForm.getAttribute("method");
+    const sendPost = (e, pollForm) => {  
+      const nameField = pollForm.querySelector("#nameField");
 
-      const nameField = nameForm.querySelector("#nameField");
-      const ageField = nameForm.querySelector("#ageField");
+      let size = pollform.getElementById("optionList").getElementsByTagName("li").length;
+      console.log(size);
 
       const xhr = new XMLHttpRequest();
-      xhr.open(nameMethod, nameAction); // method, url
+      xhr.open("post", "/addPoll"); // method, url
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xhr.setRequestHeader("Accept", "application/json");
       xhr.onload = () => handleResponse(xhr);
 
-      const formData = `name=${nameField.value}&age=${ageField.value}`;
+      const formData = `name=${nameField.value}&size=2&options=${["Option 1", "Option 2"]}`;
 
       xhr.send(formData);
       
@@ -77,7 +76,6 @@
     };
 
     // Sends a GET or HEAD request to the server
-    // TODO: bad naming
     const sendGet = (e, userForm) => {     
       const urlField = userForm.querySelector("#urlField");
       const methodSelect = userForm.querySelector("#methodSelect");
@@ -100,7 +98,7 @@
       return false;
     };
 
-    // Create a new field for a poll option
+    // Helper Function: Creates a new field for a poll option
     const addOption = () => {
       const optionList = document.querySelector("#optionList");
 
@@ -113,14 +111,14 @@
     // Attach listeners to elements
     const init = () => {
       // OLD CODE
-      const nameForm = document.querySelector('#nameForm');
-      const userForm = document.querySelector('#userForm');
+      // const nameForm = document.querySelector('#nameForm');
+      // const userForm = document.querySelector('#userForm');
       
-      const addUser = (e) => sendPost(e, nameForm);
-      const send = (e) => sendGet(e, userForm);
+      // const addUser = (e) => sendPost(e, nameForm);
+      // const send = (e) => sendGet(e, userForm);
       
-      nameForm.addEventListener('submit', addUser);
-      userForm.addEventListener('submit', send);
+      // nameForm.addEventListener('submit', addUser);
+      // userForm.addEventListener('submit', send);
       // END OLD CODE
 
 
@@ -128,13 +126,11 @@
       const addOptionButton = document.querySelector("#addOption");
       const createPollButton = document.querySelector("#createPoll");
 
-      const addPoll = (e) = sendPost(e, pollForm);
-      //const send = (e) = sendGet(e, )
+      const addPoll = (e) => sendPost(e, pollForm);
+      //const send = (e) => sendGet(e, )
       
-      
-
-
-      addOptionButton.addEventListener("submit", addOption);
+      addOptionButton.addEventListener("click", addOption);
+      createPollButton.addEventListener("submit", addPoll);
     };
 
     window.onload = init;
@@ -144,7 +140,7 @@
 <body>
   <section id="forms">
     <h1>Tally Poll!</h1>
-    <form id="userForm" action="/getUsers" method="get">
+    <!-- <form id="userForm" action="/getUsers" method="get">
       <select id='urlField'>
         <option value='/getUsers'>/getUsers</option>
         <option value='/notReal'>/notReal</option>
@@ -154,22 +150,21 @@
         <option value="head">HEAD</option>
       </select>
       <input type="submit" value="Send" />
-    </form>
-
-    <br>
+    </form> -->
 
     <form id="pollForm" action="addPoll" method="post">
       <label for="name">Poll Name: </label>
       <input id="nameField" type="text" name="name">
       <!-- <label for="size">Size: </label>
       <input id="sizeField" type="number" name="size" min="2" max="50" step="1"> -->
-      <input id="addOption" type="submit" value="Add Option">
+      
       <input id="createPoll" type="submit" value="Create Poll">
 
       <ul id="optionList">
         <li><input type="text" value="Option 1"></li>
         <li><input type="text" value="Option 2"></li>
       </ul>
+      <button id="addOption" type="button">Add Option</button>
     </form>
   </section>
 

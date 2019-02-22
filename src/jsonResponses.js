@@ -31,12 +31,18 @@ const getPolls = (request, response, isHead = false) => {
 // body is an object with the keys: name, size, and options
 // options is an array of strings which name an option that can be chosen in a poll
 const addPoll = (request, response, body) => {
+  console.dir(pollHandler.getPolls);
+
   const responseJSON = {
     message: 'You must include at least 2 options with your poll',
   };
 
+  console.dir(body);
+  
   // Make sure that all options have been filled out
-  const { local: options } = body.options; // use "object desctructuring" to prevent eslint error
+  // use "object desctructuring" to prevent eslint error
+  // const { local: options } = body.options;
+  let options = body.options;
 
   for (let i = 0; i < body.size; i++) {
     if (!options[i] || options[i] === '' || options[i] === null) {

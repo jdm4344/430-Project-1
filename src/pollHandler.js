@@ -29,7 +29,7 @@ const addPoll = (name, size = 2, options) => {
 };
 
 // Returns the polls object
-const getPolls = () => polls;
+const getPolls = () => {return polls;};
 
 module.exports = {
   addPoll,
