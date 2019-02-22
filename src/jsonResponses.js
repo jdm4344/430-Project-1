@@ -1,4 +1,4 @@
-const pollHandler = require('./pollResponses.js');
+const pollHandler = require('./pollHandler.js');
 
 // Helper method sending JSON response with a body
 const respondJSON = (request, response, status, object) => {
