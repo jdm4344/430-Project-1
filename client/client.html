@@ -15,7 +15,7 @@
 
     // Interpret the response from the server
     const handleResponse = (xhr, parseResponse=true) => {
-      const content = document.querySelector('#content');
+      const content = document.querySelector('#pollList');
       let json = "";
       let size = 0;
 
@@ -30,7 +30,7 @@
           if(json === "") {
             content.innerHTML = `<b>Success</b>`;
           } else {           
-            content.innerHTML = `<b>Success</b><p>${JSON.stringify(json.users)}</p>`;
+            content.innerHTML = `<b>Success</b><p>${JSON.stringify(json)}</p>`;
           }
           break;
         case 201:
@@ -57,6 +57,8 @@
 
     // Sends a POST request to the server
     const sendPost = (e, pollForm) => {  
+      console.log("sendPost");
+      console.log(e);
       const nameField = pollForm.querySelector("#nameField");
 
       
@@ -79,15 +81,19 @@
     };
 
     // Sends a GET or HEAD request to the server
-    const sendGet = (e, userForm) => {     
-      const urlField = userForm.querySelector("#urlField");
-      const methodSelect = userForm.querySelector("#methodSelect");
+    const sendGet = (e) => {     
+      console.log("sendGet");
+      
+      // const urlField = userForm.querySelector("#urlField");
+      // const methodSelect = userForm.querySelector("#methodSelect");
 
-      const userAction = urlField.value;
-      const userMethod = methodSelect.value;
+      // const userAction = urlField.value;
+      // const userMethod = methodSelect.value;
+
+      const userMethod = "get";
 
       const xhr = new XMLHttpRequest();
-      xhr.open(userMethod, userAction); // method, url
+      xhr.open("get", "/getPolls"); // method, url
       xhr.setRequestHeader("Accept", "application/json");
       // Tell the server whether the request is GET or HEAD
       if(userMethod === "head"){
@@ -130,12 +136,15 @@
       const pollForm = document.querySelector("#pollForm");
       const addOptionButton = document.querySelector("#addOption");
       const createPollButton = document.querySelector("#createPoll");
+      const getPollsButton = document.querySelector("#getPolls");
 
       const addPoll = (e) => sendPost(e, pollForm);
-      //const send = (e) => sendGet(e, )
+      const getPolls = (e) => sendGet(e);
       
       addOptionButton.addEventListener("click", addOption);
       createPollButton.addEventListener("submit", addPoll);
+      getPollsButton.addEventListener("click", getPolls);
+
     };
 
     window.onload = init;
@@ -174,6 +183,7 @@
   </section>
 
   <section id="content">
+    <button id="getPolls">Get Polls</button>
     <h2>Polls:</h2>
     <ul id="pollList">
       
