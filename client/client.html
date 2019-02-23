@@ -6,7 +6,7 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
-    let size = 0;
+    let size = 2;
 
     const parseJSON = (xhr) => {
       const obj = JSON.parse(xhr.response);
@@ -57,22 +57,23 @@
     };
 
     // Sends a POST request to the server
-    const sendPost = (e, pollForm) => {  
-      console.log("sendPost");
-      console.log(e);
-      const nameField = pollForm.querySelector("#nameField");
-
-      console.log(size);
-
+    const sendPost = (e, pollForm) => { 
       const xhr = new XMLHttpRequest();
       xhr.open("post", "/addPoll"); // method, url
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xhr.setRequestHeader("Accept", "application/json");
       xhr.onload = () => handleResponse(xhr);
 
-      let test = ["option 1", "option 2", "option 3"];
+      const nameField = pollForm.querySelector("#nameField");
+      const optionList = document.querySelector("#optionList").getElementsByTagName("li");
+      let options = [];
 
-      const formData = `name=${nameField.value}&size=${size}&options=${test}`;
+      for(let i=0; i<optionList.childElementCount; i++){
+        let opt = optionList[i].querySelector("input").value;
+        options.push(opt);
+      }
+
+      const formData = `name=${nameField.value}&size=${size}&options=${options}`;
       // console.log(formData);
 
       // alert(formData);
@@ -85,14 +86,6 @@
 
     // Sends a GET or HEAD request to the server
     const sendGet = (e) => {     
-      console.log("sendGet");
-      
-      // const urlField = userForm.querySelector("#urlField");
-      // const methodSelect = userForm.querySelector("#methodSelect");
-
-      // const userAction = urlField.value;
-      // const userMethod = methodSelect.value;
-
       const userMethod = "get";
 
       const xhr = new XMLHttpRequest();
@@ -123,21 +116,24 @@
       size = pollForm.querySelector("#optionList").getElementsByTagName("li").length;
     };
 
+    // Removes options from the survey form
+    const removeOption = () => {
+      const optionList = document.querySelector("#optionList");
+
+      if(optionList.childElemnetCount > 2){
+        const lastOption = optionList.lastElementChild;
+        lastOption.parentNode.removeChild(lastOption);
+      } else {
+        console.log("It's not much of a choice if you only have one option!");
+        // TODO: Display an error message
+      }
+    };
+
     // Attach listeners to elements
     const init = () => {
-      // OLD CODE
-      // const nameForm = document.querySelector('#nameForm');
-      // const userForm = document.querySelector('#userForm');
-      
-      // const addUser = (e) => sendPost(e, nameForm);
-      // const send = (e) => sendGet(e, userForm);
-      
-      // nameForm.addEventListener('submit', addUser);
-      // userForm.addEventListener('submit', send);
-      // END OLD CODE
-
       const pollForm = document.querySelector("#pollForm");
       const addOptionButton = document.querySelector("#addOption");
+      const removeOptionButton = document.querySelector("#removeOption");
       const createPollButton = document.querySelector("#createPoll");
       const getPollsButton = document.querySelector("#getPolls");
 
@@ -145,6 +141,7 @@
       const getPolls = (e) => sendGet(e);
       
       addOptionButton.addEventListener("click", addOption);
+      removeOptionButton.addEventListener("click", removeOption);
       createPollButton.addEventListener("click", addPoll);
       getPollsButton.addEventListener("click", getPolls);
     };
@@ -156,23 +153,9 @@
 <body>
   <section id="forms">
     <h1>Tally Poll!</h1>
-    <!-- <form id="userForm" action="/getUsers" method="get">
-      <select id='urlField'>
-        <option value='/getUsers'>/getUsers</option>
-        <option value='/notReal'>/notReal</option>
-      </select>
-      <select id="methodSelect">
-        <option value="get">GET</option>
-        <option value="head">HEAD</option>
-      </select>
-      <input type="submit" value="Send" />
-    </form> -->
-
     <form id="pollForm" action="addPoll" method="post">
       <label for="name">Poll Name: </label>
       <input id="nameField" type="text" name="name">
-      <!-- <label for="size">Size: </label>
-      <input id="sizeField" type="number" name="size" min="2" max="50" step="1"> -->
       <input id="createPoll" type="submit" value="Create Poll">      
 
       <ul id="optionList">
@@ -180,9 +163,9 @@
         <li><input type="text" value="Option 2"></li>
       </ul>
       <button id="addOption" type="button">Add Option</button>
-
+      <button id="removeOption" type="button">Remove Option</button>
     </form>
-    <!-- <button id="createPoll">Create Poll</button> -->
+
   </section>
 
   <section id="content">

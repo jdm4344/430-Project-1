@@ -29,7 +29,9 @@ const addPoll = (name, size, options) => {
 };
 
 // Returns the polls object
-const getPolls = () => {return polls;};
+const getPolls = () => {console.dir(polls); return polls};
+
+
 
 module.exports = {
   addPoll,
