@@ -6,6 +6,8 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    let size = 0;
+
     const parseJSON = (xhr) => {
       const obj = JSON.parse(xhr.response);
       // console.dir(obj);
@@ -17,7 +19,6 @@
     const handleResponse = (xhr, parseResponse=true) => {
       const content = document.querySelector('#pollList');
       let json = "";
-      let size = 0;
 
       // Handle responses without a body
       if(parseResponse && xhr.status != 204) {
@@ -61,7 +62,6 @@
       console.log(e);
       const nameField = pollForm.querySelector("#nameField");
 
-      
       console.log(size);
 
       const xhr = new XMLHttpRequest();
@@ -73,6 +73,9 @@
       let test = ["option 1", "option 2", "option 3"];
 
       const formData = `name=${nameField.value}&size=${size}&options=${test}`;
+      // console.log(formData);
+
+      // alert(formData);
 
       xhr.send(formData);
       
@@ -116,7 +119,8 @@
       newOpt.appendChild(newInp);
       optionList.appendChild(newOpt);
 
-      size = pollform.getElementById("optionList").getElementsByTagName("li").length;
+      const pollForm = document.querySelector("#pollForm");
+      size = pollForm.querySelector("#optionList").getElementsByTagName("li").length;
     };
 
     // Attach listeners to elements
@@ -132,7 +136,6 @@
       // userForm.addEventListener('submit', send);
       // END OLD CODE
 
-
       const pollForm = document.querySelector("#pollForm");
       const addOptionButton = document.querySelector("#addOption");
       const createPollButton = document.querySelector("#createPoll");
@@ -142,9 +145,8 @@
       const getPolls = (e) => sendGet(e);
       
       addOptionButton.addEventListener("click", addOption);
-      createPollButton.addEventListener("submit", addPoll);
+      createPollButton.addEventListener("click", addPoll);
       getPollsButton.addEventListener("click", getPolls);
-
     };
 
     window.onload = init;
@@ -171,15 +173,16 @@
       <input id="nameField" type="text" name="name">
       <!-- <label for="size">Size: </label>
       <input id="sizeField" type="number" name="size" min="2" max="50" step="1"> -->
-      
-      <input id="createPoll" type="submit" value="Create Poll">
+      <input id="createPoll" type="submit" value="Create Poll">      
 
       <ul id="optionList">
         <li><input type="text" value="Option 1"></li>
         <li><input type="text" value="Option 2"></li>
       </ul>
       <button id="addOption" type="button">Add Option</button>
+
     </form>
+    <!-- <button id="createPoll">Create Poll</button> -->
   </section>
 
   <section id="content">
