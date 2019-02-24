@@ -65,18 +65,17 @@
       xhr.onload = () => handleResponse(xhr);
 
       const nameField = pollForm.querySelector("#nameField");
-      const optionList = document.querySelector("#optionList").getElementsByTagName("li");
+      const optionList = document.querySelector("#optionList").getElementsByTagName("li");      
+      
       let options = [];
-
-      for(let i=0; i<optionList.childElementCount; i++){
+      for(let i=0; i<size; i++){
         let opt = optionList[i].querySelector("input").value;
         options.push(opt);
       }
 
-      const formData = `name=${nameField.value}&size=${size}&options=${options}`;
-      // console.log(formData);
 
-      // alert(formData);
+      const formData = `name=${nameField.value}&size=${size}&options=${options}`;
+
 
       xhr.send(formData);
       
@@ -113,16 +112,18 @@
       optionList.appendChild(newOpt);
 
       const pollForm = document.querySelector("#pollForm");
-      size = pollForm.querySelector("#optionList").getElementsByTagName("li").length;
+      // size = pollForm.querySelector("#optionList").getElementsByTagName("li").length;
+      size++;
     };
 
     // Removes options from the survey form
     const removeOption = () => {
       const optionList = document.querySelector("#optionList");
 
-      if(optionList.childElemnetCount > 2){
+      if(size > 2){
         const lastOption = optionList.lastElementChild;
         lastOption.parentNode.removeChild(lastOption);
+        size--;
       } else {
         console.log("It's not much of a choice if you only have one option!");
         // TODO: Display an error message
