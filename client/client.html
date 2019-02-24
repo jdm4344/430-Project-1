@@ -17,7 +17,7 @@
 
     // Interpret the response from the server
     const handleResponse = (xhr, parseResponse=true) => {
-      const content = document.querySelector('#pollList');
+      const content = document.querySelector('#contentMessage');
       let json = "";
 
       // Handle responses without a body
@@ -31,7 +31,14 @@
           if(json === "") {
             content.innerHTML = `<b>Success</b>`;
           } else {           
-            content.innerHTML = `<b>Success</b><p>${JSON.stringify(json)}</p>`;
+            // content.innerHTML = `<b>Success</b><p>${JSON.stringify(json.polls)}</p>`;
+            const pollTable = document.querySelector('#pollTable');
+
+            for(let poll in json.polls){
+              let li = document.createElement("li");
+              li.innerHTML = poll;
+              pollTable.appendChild(li);
+            }
           }
           break;
         case 201:
@@ -67,15 +74,15 @@
       const nameField = pollForm.querySelector("#nameField");
       const optionList = document.querySelector("#optionList").getElementsByTagName("li");      
       
+      // Put the values of the optionList's li's inputs into an array to be sent
       let options = [];
       for(let i=0; i<size; i++){
         let opt = optionList[i].querySelector("input").value;
         options.push(opt);
       }
 
-
+      // Create data string
       const formData = `name=${nameField.value}&size=${size}&options=${options}`;
-
 
       xhr.send(formData);
       
@@ -85,7 +92,7 @@
 
     // Sends a GET or HEAD request to the server
     const sendGet = (e) => {     
-      const userMethod = "get";
+      const userMethod = "get"; // Just use get for now
 
       const xhr = new XMLHttpRequest();
       xhr.open("get", "/getPolls"); // method, url
@@ -112,7 +119,6 @@
       optionList.appendChild(newOpt);
 
       const pollForm = document.querySelector("#pollForm");
-      // size = pollForm.querySelector("#optionList").getElementsByTagName("li").length;
       size++;
     };
 
@@ -133,17 +139,18 @@
     // Attach listeners to elements
     const init = () => {
       const pollForm = document.querySelector("#pollForm");
+
+      const createPollButton = document.querySelector("#createPoll");
       const addOptionButton = document.querySelector("#addOption");
       const removeOptionButton = document.querySelector("#removeOption");
-      const createPollButton = document.querySelector("#createPoll");
       const getPollsButton = document.querySelector("#getPolls");
 
       const addPoll = (e) => sendPost(e, pollForm);
       const getPolls = (e) => sendGet(e);
       
+      createPollButton.addEventListener("click", addPoll);
       addOptionButton.addEventListener("click", addOption);
       removeOptionButton.addEventListener("click", removeOption);
-      createPollButton.addEventListener("click", addPoll);
       getPollsButton.addEventListener("click", getPolls);
     };
 
@@ -155,10 +162,11 @@
   <section id="forms">
     <h1>Tally Poll!</h1>
     <form id="pollForm" action="addPoll" method="post">
+      <!-- Form Data -->
       <label for="name">Poll Name: </label>
       <input id="nameField" type="text" name="name">
       <input id="createPoll" type="submit" value="Create Poll">      
-
+      <!-- List of options to be voted on -->
       <ul id="optionList">
         <li><input type="text" value="Option 1"></li>
         <li><input type="text" value="Option 2"></li>
@@ -166,15 +174,25 @@
       <button id="addOption" type="button">Add Option</button>
       <button id="removeOption" type="button">Remove Option</button>
     </form>
-
   </section>
 
   <section id="content">
     <button id="getPolls">Get Polls</button>
     <h2>Polls:</h2>
-    <ul id="pollList">
-      
-    </ul>
+    <table id="pollTable">
+        <thead><tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Options</th>
+        </tr></thead>
+        <tr>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+    </table>
+
+    <p id="contentMessage"></p>
   </section>
 </body>
 </html>

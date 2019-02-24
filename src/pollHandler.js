@@ -8,7 +8,7 @@ const addPoll = (name, size, options) => {
   if (polls[name]) {
     polls[name].size = size;
     polls[name].options = options;
-
+    // Don't overwrite votes
     responseCode = 204;
   } else {
     polls[name] = {};

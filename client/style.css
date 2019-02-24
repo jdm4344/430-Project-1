@@ -28,3 +28,16 @@ html, body {
 ul {
   list-style-type: none;
 }
+
+#pollTable {
+  margin: 0 auto;
+}
+
+#pollTable th{
+  padding: 0.25em;
+  outline: 2px solid black;
+}
+
+#pollTable td{
+  outline: 2px solid black;
+}
