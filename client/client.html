@@ -27,25 +27,21 @@
 
       switch (xhr.status) {
         case 200:
-          // Only add the object to the page if users exist
+          // Only add the object to the page if polls exist
           if(json === "") {
             content.innerHTML = `<b>Success</b>`;
           } else {           
-            // content.innerHTML = `<b>Success</b><p>${JSON.stringify(json.polls)}</p>`;
-            const pollTable = document.querySelector('#pollTable');
-
-            for(let poll in json.polls){
-              let li = document.createElement("li");
-              li.innerHTML = poll;
-              pollTable.appendChild(li);
-            }
+            // content.innerHTML = `<b>Success</b><p>${JSON.stringify(json.polls)}</p>`;            
+            loadAllPolls(json);
           }
           break;
         case 201:
-          content.innerHTML = `<b>Created</b><p>Message: ${json.message}</p>`;          
+          content.innerHTML = `<b>Created</b><p>Message: ${json.message}</p>`;    
+          sendGet();
           break;
         case 204:
           content.innerHTML = `<b>Updated (No Content)</b>`;
+          sendGet();
           break;
         case 400:
           content.innerHTML = `<b>Bad Request</b><p>Message: ${json.message}</p>`;          
@@ -105,7 +101,7 @@
       }
       xhr.send();
       
-      e.preventDefault();
+      if(e) {e.preventDefault();}
       return false;
     };
 
@@ -136,6 +132,41 @@
       }
     };
 
+    // Retrieves all polls from the server and displays their name and number of responses
+    const loadAllPolls = (json) => {
+      const pollTable = document.querySelector('#pollTable');
+
+      // Clear the table
+      while (pollTable.firstChild) {
+        pollTable.removeChild(pollTable.firstChild);
+      }
+      
+      // Create the header row
+      let headerRow = document.createElement("tr");
+      let nameTDHead = document.createElement("td");
+      let respTDHead = document.createElement("td");
+      nameTDHead.innerHTML = "Name";
+      respTDHead.innerHTML = "Responses";
+      headerRow.appendChild(nameTDHead);
+      headerRow.appendChild(respTDHead);
+      pollTable.appendChild(headerRow);
+
+      for(let poll of Object.keys(json.polls)){
+        // console.log(json.polls[poll]);
+
+        let tr = document.createElement("tr");
+        let nameTD = document.createElement("td");
+        let respTD = document.createElement("td");
+
+        nameTD.innerHTML = json.polls[poll].name;
+        respTD.innerHTML = json.polls[poll].responses;
+
+        tr.appendChild(nameTD);
+        tr.appendChild(respTD);
+        pollTable.appendChild(tr);
+      }
+    };
+
     // Attach listeners to elements
     const init = () => {
       const pollForm = document.querySelector("#pollForm");
@@ -152,6 +183,8 @@
       addOptionButton.addEventListener("click", addOption);
       removeOptionButton.addEventListener("click", removeOption);
       getPollsButton.addEventListener("click", getPolls);
+
+      getPolls();
     };
 
     window.onload = init;
@@ -179,18 +212,7 @@
   <section id="content">
     <button id="getPolls">Get Polls</button>
     <h2>Polls:</h2>
-    <table id="pollTable">
-        <thead><tr>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Options</th>
-        </tr></thead>
-        <tr>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-        </tr>
-    </table>
+    <table id="pollTable"></table>
 
     <p id="contentMessage"></p>
   </section>

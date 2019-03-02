@@ -1,4 +1,12 @@
-const polls = {};
+const polls = {
+  'Test Poll': {
+    name: 'Test Poll',
+    size: 2,
+    options: ['Option 1', 'Option 2'],
+    votes: [2, 1],
+    responses: 1,
+  },
+};
 
 // Creates a new poll and saves it to the polls object
 const addPoll = (name, size, options) => {
@@ -24,16 +32,20 @@ const addPoll = (name, size, options) => {
   polls[name].size = size;
   polls[name].options = options; // Will be array of strings
   polls[name].votes = []; // Will be array of ints corresponding to the options
+  polls[name].responses = 0;
 
   return responseCode;
 };
 
+const castVote = (name) => {
+
+};
+
 // Returns the polls object
-const getPolls = () => {console.dir(polls); return polls};
-
-
+const getPolls = () => { console.dir(polls); return polls; };
 
 module.exports = {
   addPoll,
   getPolls,
+  castVote,
 };

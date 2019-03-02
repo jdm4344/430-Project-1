@@ -40,7 +40,7 @@ const addPoll = (request, response, body) => {
 
   // Make sure that all options have been filled out
   // use "object desctructuring" to prevent eslint error
-  const { options: options } = body;
+  const { options } = body;
 
   for (let i = 0; i < body.size; i++) {
     if (!options[i] || options[i] === '' || options[i] === null) {
