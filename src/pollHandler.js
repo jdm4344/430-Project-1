@@ -38,7 +38,7 @@ const addPoll = (name, size, options) => {
 };
 
 const castVote = (name) => {
-
+  
 };
 
 // Returns the polls object

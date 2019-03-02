@@ -42,3 +42,9 @@ ul {
   outline: 2px solid black;
   padding: 0.15em;
 }
+
+#pollDisplay{
+  margin: 10%;
+  outline: 2px solid black;
+  min-height: 3em; /* REMOVE THIS */
+}
