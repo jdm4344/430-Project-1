@@ -28,7 +28,25 @@ const getPolls = (request, response, isHead = false) => {
 };
 
 const getPoll = (request, response, body) => {
+  const responseJSON = {
+    message: 'Poll of with that name does not exist.',
+  };
 
+  // use "object desctructuring" to prevent eslint error
+  const { name } = body;
+
+  // Get the requested poll from pollHandler
+  const poll = pollHandler.getPoll(name);
+
+  if (poll === null) {
+    response.id = 'doesNotExist';
+    return respondJSON(request, response, 400, responseJSON);
+  }
+
+  // If reached, poll exists -> send it back
+  responseJSON.message = 'Retrieved Successfully';
+  responseJSON.poll = poll;
+  return respondJSON(request, response, 200, responseJSON);
 };
 
 // Creates a new poll or updates an existing one
@@ -87,5 +105,6 @@ module.exports = {
   getPolls,
   getPoll,
   addPoll,
+  castVote,
   notFound,
 };

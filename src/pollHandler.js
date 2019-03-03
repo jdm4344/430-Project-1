@@ -1,7 +1,7 @@
 const polls = {
   'Test Poll': {
     name: 'Test Poll',
-    id: "0",
+    id: '0',
     size: 2,
     options: ['Option 1', 'Option 2'],
     votes: [2, 1],
@@ -57,7 +57,16 @@ const castVote = (name, votes) => {
 // Returns the polls object
 const getPolls = () => { console.dir(polls); return polls; };
 
-const getPoll = (name) => { return polls[name]; };
+// Retrieves a poll by name
+const getPoll = (name) => {
+  let pollObj = null;
+
+  if (polls[name]) {
+    pollObj = polls[name];
+  }
+
+  return pollObj;
+};
 
 module.exports = {
   addPoll,

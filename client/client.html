@@ -30,6 +30,9 @@
           // Only add the object to the page if polls exist
           if(json === "") {
             content.innerHTML = `<b>Success</b>`;
+          } else if(json.poll) {
+            // Sent a single poll -> display it
+            displayPoll(json.poll);
           } else {           
             // content.innerHTML = `<b>Success</b><p>${JSON.stringify(json.polls)}</p>`;            
             loadAllPolls(json);
@@ -172,6 +175,11 @@
       }
     };
 
+    const displayPoll = (poll) => {
+      const pollDisplay = document.querySelector("#pollDisplay");
+
+    };
+
     // Attach listeners to elements
     const init = () => {
       const pollForm = document.querySelector("#pollForm");
@@ -221,7 +229,9 @@
       <table id="pollTable"></table>
     </div>
     
-    <div id="pollDisplay"></div>
+    <div id="pollDisplay">
+
+    </div>
 
     <p id="contentMessage"></p>
   </section>

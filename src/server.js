@@ -59,7 +59,6 @@ const handleGet = (request, response, parsedUrl) => {
       // console.dir(bodyParams);
       jsonHandler.getPoll(request, response, bodyParams);
     });
-
   } else {
     jsonHandler.notFound(request, response);
   }
