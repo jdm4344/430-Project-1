@@ -64,7 +64,7 @@ const addPoll = (request, response, body) => {
 };
 
 const castVote = (request, response) => {
-  
+
 };
 
 // Returns response for if the requested page does not exist

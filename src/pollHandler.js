@@ -1,12 +1,15 @@
 const polls = {
   'Test Poll': {
     name: 'Test Poll',
+    id: "0",
     size: 2,
     options: ['Option 1', 'Option 2'],
     votes: [2, 1],
     responses: 1,
   },
 };
+
+let pollID = 0;
 
 // Creates a new poll and saves it to the polls object
 const addPoll = (name, size, options) => {
@@ -29,6 +32,8 @@ const addPoll = (name, size, options) => {
   } else {
     polls[name].name = name;
   }
+  pollID++;
+  polls[name].id = pollID;
   polls[name].size = size;
   polls[name].options = options; // Will be array of strings
   polls[name].votes = []; // Will be array of ints corresponding to the options
@@ -43,7 +48,10 @@ const castVote = (name, votes) => {
     for (let i = 0; i < polls[name].size; i++) {
       polls[name].votes[i] += votes[i];
     }
+
+    return true;
   }
+  return false;
 };
 
 // Returns the polls object

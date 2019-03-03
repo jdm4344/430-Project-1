@@ -87,21 +87,29 @@
     };
 
     // Sends a GET or HEAD request to the server
-    const sendGet = (e) => {     
-      const userMethod = "get"; // Just use get for now
-
+    // e is the calling object, ie a button
+    // method determins GET/HEAD request
+    // pollName is an optional parameter for retreiving a specific poll's data
+    const sendGet = (e, method="get", pollName) => {    
       const xhr = new XMLHttpRequest();
-      xhr.open("get", "/getPolls"); // method, url
+      xhr.open(method, "/getPolls"); // method, url
       xhr.setRequestHeader("Accept", "application/json");
       // Tell the server whether the request is GET or HEAD
-      if(userMethod === "head"){
+      if(method === "head"){
         xhr.onload = () => handleResponse(xhr, false);
       } else {
         xhr.onload = () => handleResponse(xhr);
       }
-      xhr.send();
+
+      // Handle retrieving a specific poll
+      if(pollName){
+        const formData = `name=${pollName}`;
+        xhr.send(formData);
+      } else {
+        xhr.send();
+      }
       
-      if(e) {e.preventDefault();}
+      if(e) { e.preventDefault(); }
       return false;
     };
 
@@ -150,15 +158,18 @@
       for(let poll of Object.keys(json.polls)){
         // console.log(json.polls[poll]);
         let row = document.createElement("tr");
-        row.innerHTML = `<td><a href="">${json.polls[poll].name}</a></td><td>${json.polls[poll].responses}</td>`;
+        const pollID = `${json.polls[poll].id}`;
+        const pollName = `${json.polls[poll].name}`;
+        // Create the new table row with a link
+        // Give the link an id of "poll_(name of poll)" to attach a function to it
+        row.innerHTML = `<td><a href="#" id="poll_${pollID}">${pollName}</a></td><td>${pollName}</td>`;
 
         pollTable.appendChild(row);
+        let pollLink = document.querySelector(`#poll_${pollID}`);
+        
+        const func = () => sendGet(null, "get", `${pollName}`);
+        pollLink.addEventListener("click", func);
       }
-    };
-
-    
-    const displayPoll = () => {
-
     };
 
     // Attach listeners to elements
