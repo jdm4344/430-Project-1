@@ -39,7 +39,7 @@ const addPoll = (name, size, options) => {
 
 // Saves vote results to the associated poll
 const castVote = (name, votes) => {
-  if(polls[name]){
+  if (polls[name]) {
     for (let i = 0; i < polls[name].size; i++) {
       polls[name].votes[i] += votes[i];
     }

@@ -63,6 +63,10 @@ const addPoll = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode);
 };
 
+const castVote = (request, response) => {
+  
+};
+
 // Returns response for if the requested page does not exist
 const notFound = (request, response, isHead = false) => {
   if (isHead === true) {
