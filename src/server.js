@@ -39,6 +39,27 @@ const handleGet = (request, response, parsedUrl) => {
     htmlHandler.getCSS(request, response);
   } else if (parsedUrl.pathname === '/getPolls') {
     jsonHandler.getPolls(request, response);
+  } else if (parsedUrl.pathname === '/getPoll') {
+    const body = [];
+
+    request.on('error', (err) => {
+      console.dir(err);
+      response.statusCode = 400;
+      response.end();
+    });
+
+    request.on('data', (chunk) => {
+      // console.dir(`chunk ${chunk}`);
+      body.push(chunk);
+    });
+
+    request.on('end', () => {
+      const bodyString = Buffer.concat(body).toString();
+      const bodyParams = query.parse(bodyString);
+      // console.dir(bodyParams);
+      jsonHandler.getPoll(request, response, bodyParams);
+    });
+
   } else {
     jsonHandler.notFound(request, response);
   }

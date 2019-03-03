@@ -90,9 +90,9 @@
     // e is the calling object, ie a button
     // method determins GET/HEAD request
     // pollName is an optional parameter for retreiving a specific poll's data
-    const sendGet = (e, method="get", pollName) => {    
+    const sendGet = (e, method="get", action="/getPolls", pollName) => {    
       const xhr = new XMLHttpRequest();
-      xhr.open(method, "/getPolls"); // method, url
+      xhr.open(method, action); // method, url
       xhr.setRequestHeader("Accept", "application/json");
       // Tell the server whether the request is GET or HEAD
       if(method === "head"){
@@ -167,7 +167,7 @@
         pollTable.appendChild(row);
         let pollLink = document.querySelector(`#poll_${pollID}`);
         
-        const func = () => sendGet(null, "get", `${pollName}`);
+        const func = () => sendGet(null, "get", "/getPoll", `${pollName}`);
         pollLink.addEventListener("click", func);
       }
     };

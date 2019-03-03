@@ -27,6 +27,10 @@ const getPolls = (request, response, isHead = false) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
+const getPoll = (request, response, body) => {
+
+};
+
 // Creates a new poll or updates an existing one
 // body is an object with the keys: name, size, options
 // options is an array of strings which name an option that can be chosen in a poll
@@ -81,6 +85,7 @@ const notFound = (request, response, isHead = false) => {
 
 module.exports = {
   getPolls,
+  getPoll,
   addPoll,
   notFound,
 };

@@ -57,8 +57,11 @@ const castVote = (name, votes) => {
 // Returns the polls object
 const getPolls = () => { console.dir(polls); return polls; };
 
+const getPoll = (name) => { return polls[name]; };
+
 module.exports = {
   addPoll,
-  getPolls,
   castVote,
+  getPolls,
+  getPoll,
 };
