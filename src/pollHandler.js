@@ -37,8 +37,13 @@ const addPoll = (name, size, options) => {
   return responseCode;
 };
 
-const castVote = (name) => {
-  
+// Saves vote results to the associated poll
+const castVote = (name, votes) => {
+  if(polls[name]){
+    for (let i = 0; i < polls[name].size; i++) {
+      polls[name].votes[i] += votes[i];
+    }
+  }
 };
 
 // Returns the polls object

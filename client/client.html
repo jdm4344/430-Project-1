@@ -143,30 +143,16 @@
       
       // Create the header row
       let headerRow = document.createElement("tr");
-      let nameTDHead = document.createElement("td");
-      let respTDHead = document.createElement("td");
-      nameTDHead.innerHTML = "Name";
-      respTDHead.innerHTML = "Responses";
-      headerRow.appendChild(nameTDHead);
-      headerRow.appendChild(respTDHead);
+      headerRow.innerHTML = `<td>Name</td><td>Responses</td>`;
+
       pollTable.appendChild(headerRow);
 
       for(let poll of Object.keys(json.polls)){
         // console.log(json.polls[poll]);
+        let row = document.createElement("tr");
+        row.innerHTML = `<td><a href="">${json.polls[poll].name}</a></td><td>${json.polls[poll].responses}</td>`;
 
-        let tr = document.createElement("tr");
-        let nameTD = document.createElement("td");
-        let respTD = document.createElement("td");
-        let nameA = document.createElement("a");
-
-        nameA.innerHTML = json.polls[poll].name;
-        nameA.href = "";
-        respTD.innerHTML = json.polls[poll].responses;
-
-        nameTD.appendChild(nameA);
-        tr.appendChild(nameTD);
-        tr.appendChild(respTD);
-        pollTable.appendChild(tr);
+        pollTable.appendChild(row);
       }
     };
 
