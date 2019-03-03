@@ -28,6 +28,8 @@ const handlePost = (request, response, parsedUrl) => {
       // console.dir(bodyParams);
       jsonHandler.addPoll(request, response, bodyParams);
     });
+  } else if(parsedUrl.pathname === "/castVote"){
+    
   }
 };
 

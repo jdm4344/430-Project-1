@@ -175,9 +175,50 @@
       }
     };
 
+    // Displays a single poll to the page
+    // Functionality adapted from user "williambq" at: https://stackoverflow.com/a/17929372
     const displayPoll = (poll) => {
       const pollDisplay = document.querySelector("#pollDisplay");
+      let pollString = `<form action="castVote" id="votingForm">`;
 
+      for(let i = 0; i < poll.size; i++) {
+        pollstring += `<select name="rank${i}" form="votingForm" required>`;
+        pollstring += `<option value="#" selected="selected">Rank</option>`;
+
+        for(let j = 0; j < poll.size; j++) {
+          pollstring += `<option value="${j}">${j}</option>`;
+        }
+
+        pollstring += `</select>`;
+      }
+
+      // <form action="" id="votingForm">
+      //   <select name="rank1" form="votingForm" required>
+      //     <option value="#" selected="selected">Rank</option>
+      //     <option value="1">1</option>
+      //     <option value="2">2</option>
+      //   </select>
+      //   <select name="rank2" form="votingForm" required>
+      //       <option value="#" selected="selected">Rank</option>
+      //     <option value="1">1</option>
+      //     <option value="2">2</option>
+      //   </select>
+      // </form>
+
+      pollString += `<button id="castVote" type="button">Cast Vote</button></form>`;
+      pollDisplay.appendChild(pollString);
+
+      // $(function() {
+      //   $('select').on('change', (e) => { // This binds listeners to the change event on all the select elements
+      //         var sId = this.id; // store off the changed element id
+      //         var vId = this.value; // store off the changed element value 
+      //         $('select').each( () => { // this loops across the same set of elements
+      //             if(this.id != sId && this.value == vId) { // If it is not the triggering element and the value is the same, do something
+      //                 this.options.selectedIndex = 0; // reset the value to 'rank' 
+      //             }
+      //         });
+      //     });
+      // });
     };
 
     // Attach listeners to elements
@@ -187,7 +228,7 @@
       const createPollButton = document.querySelector("#createPoll");
       const addOptionButton = document.querySelector("#addOption");
       const removeOptionButton = document.querySelector("#removeOption");
-      const getPollsButton = document.querySelector("#getPolls");
+      const castVoteButton = document.querySelector("#castVote");
 
       const addPoll = (e) => sendPost(e, pollForm);
       const getPolls = (e) => sendGet(e);
@@ -195,7 +236,7 @@
       createPollButton.addEventListener("click", addPoll);
       addOptionButton.addEventListener("click", addOption);
       removeOptionButton.addEventListener("click", removeOption);
-      // getPollsButton.addEventListener("click", getPolls);
+      getPollsButton.addEventListener("click", castVote);
 
       getPolls();
     };
@@ -224,13 +265,14 @@
 
   <section id="content">
     <div id="polls">
-      <!-- <button id="getPolls">Get Polls</button> -->
       <h2>Polls:</h2>
       <table id="pollTable"></table>
     </div>
     
     <div id="pollDisplay">
+      <h2 id="pollName">Poll Name</h2>
 
+      
     </div>
 
     <p id="contentMessage"></p>
