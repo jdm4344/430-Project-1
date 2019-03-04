@@ -51,8 +51,7 @@ const addPoll = (name, size, options) => {
     polls[name].options.push(optArr[i]);
   }
 
-  console.dir(polls[name].options);
-  polls[name].votes = []; // Will be array of ints corresponding to the options
+  polls[name].votes = null; // Will be array of ints corresponding to the options
   polls[name].responses = 0;
 
   return responseCode;
@@ -61,13 +60,22 @@ const addPoll = (name, size, options) => {
 // Saves vote results to the associated poll
 const castVote = (name, votes) => {
   if (polls[name]) {
-    for (let i = 0; i < polls[name].size; i++) {
-      polls[name].votes[i] += votes[i];
+    if(polls[name].votes === null){
+      console.dir("does not exist");
+      polls[name].votes = [];
+      for (let i = 0; i < polls[name].size; i++) {
+        polls[name].votes.push(votes[i]);
+      }
+    } else {
+      // console.dir("exists");
+      console.dir(votes);
+      for (let i = 0; i < polls[name].size; i++) {
+        polls[name].votes[i] += votes[i];
+      }
     }
-
-    return true;
+    return 204;
   }
-  return false;
+  return 400;
 };
 
 // Returns the polls object

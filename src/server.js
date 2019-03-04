@@ -8,7 +8,7 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 // Handles POST request for creating or updateing users
 const handlePost = (request, response, parsedUrl) => {
-  if (parsedUrl.pathname === '/addPoll') {
+  if (parsedUrl.pathname === '/addPoll' || parsedUrl.pathname === '/castVote') {
     const body = [];
 
     request.on('error', (err) => {
@@ -26,11 +26,13 @@ const handlePost = (request, response, parsedUrl) => {
       const bodyString = Buffer.concat(body).toString();
       const bodyParams = query.parse(bodyString);
       // console.dir(bodyParams);
-      jsonHandler.addPoll(request, response, bodyParams);
+      if(parsedUrl.pathname === '/addPoll') {
+        jsonHandler.addPoll(request, response, bodyParams);
+      } else if (parsedUrl.pathname === '/castVote') {
+        jsonHandler.castVote(request, response, bodyParams);
+      }
     });
-  } else if (parsedUrl.pathname === '/castVote') {
-
-  }
+  } 
 };
 
 // Handles GET requests, returns client, css, or users

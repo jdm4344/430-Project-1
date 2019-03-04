@@ -82,8 +82,27 @@ const addPoll = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode);
 };
 
-const castVote = (request, response) => {
+const castVote = (request, response, body) => {
+  const responseJSON = {
+    message: 'Poll with that name does not exist',
+  };
 
+  // Make sure that all options have been filled out
+  // use "object desctructuring" to prevent eslint error
+  const { votes } = body;
+
+  let responseCode = 204;
+
+  // Create the new poll
+  // pollHandler determines whether to create or update, will return appropriate response code
+  responseCode = pollHandler.castVote(body.name, votes);
+
+  if (responseCode === 204) {
+    responseJSON.message = 'Vote Cast Successfully';
+    return respondJSON(request, response, responseCode, responseJSON);
+  }
+
+  return respondJSONMeta(request, response, responseCode);
 };
 
 // Returns response for if the requested page does not exist

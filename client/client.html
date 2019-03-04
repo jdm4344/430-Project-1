@@ -63,25 +63,44 @@
     };
 
     // Sends a POST request to the server
-    const sendPost = (e, pollForm) => { 
+    const sendPost = (e, form, action="/addPoll") => { 
       const xhr = new XMLHttpRequest();
-      xhr.open("post", "/addPoll"); // method, url
+      xhr.open("post", action); // method, url
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       xhr.setRequestHeader("Accept", "application/json");
       xhr.onload = () => handleResponse(xhr);
 
-      const nameField = pollForm.querySelector("#nameField");
-      const optionList = document.querySelector("#optionList").getElementsByTagName("li");      
-      
-      // Put the values of the optionList's li's inputs into an array to be sent
-      let options = [];
-      for(let i=0; i<size; i++){
-        let opt = optionList[i].querySelector("input").value;
-        options.push(opt);
+      let formData;
+
+      if(action === "/addPoll"){
+        const nameField = form.querySelector("#nameField");
+        const optionList = document.querySelector("#optionList").getElementsByTagName("li");      
+        
+        // Put the values of the optionList's li's inputs into an array to be sent
+        let options = [];
+        for(let i=0; i<size; i++){
+          let opt = optionList[i].querySelector("input").value;
+          options.push(opt);
+        }
+
+        // Create data string
+        formData = `name=${nameField.value}&size=${size}&options=${options}`;
+      } else if(action === "/castVote") {
+        // console.log("castVote");
+        const votingFormChildren = document.querySelector("#votingForm").getElementsByTagName("select");
+        const pollName = document.querySelector("#pollName").innerHTML;
+        let votes = [];
+
+        // Get the value of each select and save it
+        for(let select of votingFormChildren) {
+          let opt = select.value;
+          votes.push(opt);
+          console.log(opt);
+        }
+        // Create data string
+        formData = `name=${pollName}&votes=${votes}`;
       }
 
-      // Create data string
-      const formData = `name=${nameField.value}&size=${size}&options=${options}`;
 
       xhr.send(formData);
       
@@ -172,7 +191,6 @@
         pollTable.appendChild(row);
         let pollLink = document.querySelector(`#poll_${pollID}`);
         
-        console.log(pollName);
         const func = () => sendGet(null, "get", "/getPoll", `${pollName}`);
         pollLink.addEventListener("click", func);
       }
@@ -180,7 +198,6 @@
 
     // Displays a single poll to the page
     const displayPoll = (poll) => {
-      console.log(poll.options);
       const pollDisplay = document.querySelector("#pollDisplay");
       let pollString = `<h2 id="pollName">${poll.name}</h2><form action="castVote" id="votingForm">`;
       
@@ -202,6 +219,15 @@
       }
 
       pollString += `<button id="castVote" type="button">Cast Vote</button></form>`;
+
+      // Add area to display the existing votes
+      pollString += `<div id="submittedVotes"><table>`;
+
+      for(let i = 0; i < poll.size; i++){
+        pollString += `<tr><td>${poll.options[i]}</td><td>${poll.votes[i]}</td></tr>`;
+      }
+
+      pollString += `</table></div>`;
       // Add the poll to the page
       pollDisplay.innerHTML = pollString;
 
@@ -226,8 +252,9 @@
         });
       } // END ADAPTED FUNCTIONALITY
 
+      const vote = (e) => sendPost(e, document.querySelector("#votingForm"), "/castVote");
       const castVoteButton = document.querySelector("#castVote");
-      castVoteButton.addEventListener("click", castVote);
+      castVoteButton.addEventListener("click", vote);
     };
 
     // Attach listeners to elements
@@ -276,8 +303,7 @@
       <table id="pollTable"></table>
     </div>
     
-    <div id="pollDisplay">      
-    </div>
+    <div id="pollDisplay"></div>
 
     <p id="contentMessage"></p>
   </section>

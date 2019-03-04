@@ -33,12 +33,12 @@ ul {
   margin: 0 auto;
 }
 
-#pollTable th{
+th{
   padding: 0.25em;
   outline: 2px solid black;
 }
 
-#pollTable td{
+td{
   outline: 2px solid black;
   padding: 0.15em;
 }
