@@ -43,8 +43,7 @@ const handleGet = (request, response, parsedUrl) => {
     jsonHandler.getPolls(request, response);
   } else if (parsedUrl.pathname.includes('/getPoll')) {
     // Parse the url parameters for the desired poll name
-    const { name } = query.parse(parsedUrl.query).name;
-    jsonHandler.getPoll(request, response, name);
+    jsonHandler.getPoll(request, response, query.parse(parsedUrl.query).name);
   } else {
     jsonHandler.notFound(request, response);
   }
