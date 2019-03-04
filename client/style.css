@@ -3,6 +3,7 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
+  
 }
 
 #forms {
@@ -47,4 +48,16 @@ td{
   margin: 10%;
   outline: 2px solid black;
   min-height: 3em; /* REMOVE THIS */
+}
+
+#submittedVotes{
+  margin: 0 auto;
+  margin-top: 1em;
+  text-align: center;
+}
+
+.rank{
+  margin: 0 auto;
+  margin-top: 1em;
+  display: block;
 }

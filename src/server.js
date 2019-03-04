@@ -26,13 +26,13 @@ const handlePost = (request, response, parsedUrl) => {
       const bodyString = Buffer.concat(body).toString();
       const bodyParams = query.parse(bodyString);
       // console.dir(bodyParams);
-      if(parsedUrl.pathname === '/addPoll') {
+      if (parsedUrl.pathname === '/addPoll') {
         jsonHandler.addPoll(request, response, bodyParams);
       } else if (parsedUrl.pathname === '/castVote') {
         jsonHandler.castVote(request, response, bodyParams);
       }
     });
-  } 
+  }
 };
 
 // Handles GET requests, returns client, css, or users

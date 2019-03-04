@@ -59,20 +59,22 @@ const addPoll = (name, size, options) => {
 
 // Saves vote results to the associated poll
 const castVote = (name, votes) => {
+  const votesArr = votes.split(',');
+
   if (polls[name]) {
-    if(polls[name].votes === null){
-      console.dir("does not exist");
+    if (polls[name].votes === null) {
+      console.dir('does not exist');
       polls[name].votes = [];
       for (let i = 0; i < polls[name].size; i++) {
-        polls[name].votes.push(votes[i]);
+        polls[name].votes.push(parseInt(votesArr[i], 10));
       }
     } else {
-      // console.dir("exists");
-      console.dir(votes);
+      console.dir('exists');
       for (let i = 0; i < polls[name].size; i++) {
-        polls[name].votes[i] += votes[i];
+        polls[name].votes[i] += parseInt(votesArr[i], 10);
       }
     }
+    console.dir(polls[name].votes);
     return 204;
   }
   return 400;

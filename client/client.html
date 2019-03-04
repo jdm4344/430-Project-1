@@ -95,7 +95,6 @@
         for(let select of votingFormChildren) {
           let opt = select.value;
           votes.push(opt);
-          console.log(opt);
         }
         // Create data string
         formData = `name=${pollName}&votes=${votes}`;
@@ -207,7 +206,7 @@
       for(let i = 0; i < poll.size; i++) {
         
         pollString += `<label for"rank${i}>${poll.options[i]}</label>`; // Give each select a label
-        pollString += `<select name="rank${i}" id="rank${i}" form="votingForm" required>`; 
+        pollString += `<select name="rank${i}" class="rank" form="votingForm" required>`; 
         pollString += `<option value="#" selected="selected">Rank</option>`; // Add default selected option
 
         // Add options to the select
@@ -221,10 +220,12 @@
       pollString += `<button id="castVote" type="button">Cast Vote</button></form>`;
 
       // Add area to display the existing votes
-      pollString += `<div id="submittedVotes"><table>`;
+      if(poll.votes){
+        pollString += `<div><table id="submittedVotes">`;
 
-      for(let i = 0; i < poll.size; i++){
-        pollString += `<tr><td>${poll.options[i]}</td><td>${poll.votes[i]}</td></tr>`;
+        for(let i = 0; i < poll.size; i++){
+          pollString += `<tr><td>${poll.options[i]}</td><td>${poll.votes[i]}</td></tr>`;
+        }
       }
 
       pollString += `</table></div>`;
