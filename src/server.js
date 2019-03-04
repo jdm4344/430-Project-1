@@ -29,7 +29,7 @@ const handlePost = (request, response, parsedUrl) => {
       jsonHandler.addPoll(request, response, bodyParams);
     });
   } else if (parsedUrl.pathname === '/castVote') {
-    
+
   }
 };
 
@@ -43,7 +43,7 @@ const handleGet = (request, response, parsedUrl) => {
     jsonHandler.getPolls(request, response);
   } else if (parsedUrl.pathname.includes('/getPoll')) {
     // Parse the url parameters for the desired poll name
-    const name = query.parse(parsedUrl.query).name;
+    const { name } = query.parse(parsedUrl.query).name;
     jsonHandler.getPoll(request, response, name);
   } else {
     jsonHandler.notFound(request, response);

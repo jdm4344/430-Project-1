@@ -72,7 +72,7 @@ const addPoll = (request, response, body) => {
 
   // Create the new poll
   // pollHandler determines whether to create or update, will return appropriate response code
-  responseCode = pollHandler.addPoll(body.name, body.size, body.options);
+  responseCode = pollHandler.addPoll(body.name, body.size, options);
 
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully';

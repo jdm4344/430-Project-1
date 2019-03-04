@@ -14,11 +14,21 @@ let pollID = 0;
 // Creates a new poll and saves it to the polls object
 const addPoll = (name, size, options) => {
   let responseCode = 201;
+  // Do split on options parameter b/c it is converted from arr to str when sent
+  // from jsonResponses for some reason
+  const optArr = options.split(',');
 
   // Check if a poll with the given name already exists, if not create a new poll
   if (polls[name]) {
     polls[name].size = size;
-    polls[name].options = options;
+
+    // Update options
+    polls[name].options = [];
+
+    for (let i = 0; i < size; i++) {
+      polls[name].options.push(optArr[i]);
+    }
+
     // Don't overwrite votes
     responseCode = 204;
   } else {
@@ -35,7 +45,13 @@ const addPoll = (name, size, options) => {
   pollID++;
   polls[name].id = pollID;
   polls[name].size = size;
-  polls[name].options = options; // Will be array of strings
+  polls[name].options = []; // Will be array of strings
+  // Save options
+  for (let i = 0; i < size; i++) {
+    polls[name].options.push(optArr[i]);
+  }
+
+  console.dir(polls[name].options);
   polls[name].votes = []; // Will be array of ints corresponding to the options
   polls[name].responses = 0;
 
