@@ -27,13 +27,10 @@ const getPolls = (request, response, isHead = false) => {
   return respondJSON(request, response, 200, responseJSON);
 };
 
-const getPoll = (request, response, body) => {
+const getPoll = (request, response, name) => {
   const responseJSON = {
-    message: 'Poll of with that name does not exist.',
+    message: 'Poll with that name does not exist.',
   };
-
-  // use "object desctructuring" to prevent eslint error
-  const { name } = body;
 
   // Get the requested poll from pollHandler
   const poll = pollHandler.getPoll(name);

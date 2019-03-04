@@ -55,7 +55,7 @@ const castVote = (name, votes) => {
 };
 
 // Returns the polls object
-const getPolls = () => { console.dir(polls); return polls; };
+const getPolls = () => polls;
 
 // Retrieves a poll by name
 const getPoll = (name) => {

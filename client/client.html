@@ -94,8 +94,16 @@
     // method determins GET/HEAD request
     // pollName is an optional parameter for retreiving a specific poll's data
     const sendGet = (e, method="get", action="/getPolls", pollName) => {    
+      console.log(action);
       const xhr = new XMLHttpRequest();
-      xhr.open(method, action); // method, url
+      
+      // Handle retrieving a specific poll
+      if(pollName){
+        xhr.open(method, action+"?name="+pollName); // method, url
+      } else {
+        xhr.open(method, action); // method, url
+      }
+
       xhr.setRequestHeader("Accept", "application/json");
       // Tell the server whether the request is GET or HEAD
       if(method === "head"){
@@ -104,13 +112,7 @@
         xhr.onload = () => handleResponse(xhr);
       }
 
-      // Handle retrieving a specific poll
-      if(pollName){
-        const formData = `name=${pollName}`;
-        xhr.send(formData);
-      } else {
-        xhr.send();
-      }
+      xhr.send();
       
       if(e) { e.preventDefault(); }
       return false;
@@ -159,10 +161,10 @@
       pollTable.appendChild(headerRow);
 
       for(let poll of Object.keys(json.polls)){
-        // console.log(json.polls[poll]);
         let row = document.createElement("tr");
         const pollID = `${json.polls[poll].id}`;
         const pollName = `${json.polls[poll].name}`;
+
         // Create the new table row with a link
         // Give the link an id of "poll_(name of poll)" to attach a function to it
         row.innerHTML = `<td><a href="#" id="poll_${pollID}">${pollName}</a></td><td>${pollName}</td>`;
@@ -170,6 +172,7 @@
         pollTable.appendChild(row);
         let pollLink = document.querySelector(`#poll_${pollID}`);
         
+        console.log(pollName);
         const func = () => sendGet(null, "get", "/getPoll", `${pollName}`);
         pollLink.addEventListener("click", func);
       }
@@ -178,18 +181,19 @@
     // Displays a single poll to the page
     // Functionality adapted from user "williambq" at: https://stackoverflow.com/a/17929372
     const displayPoll = (poll) => {
+      console.log(poll);
       const pollDisplay = document.querySelector("#pollDisplay");
-      let pollString = `<form action="castVote" id="votingForm">`;
+      let pollString = `<h2 id="pollName">${poll.name}</h2><form action="castVote" id="votingForm">`;
 
       for(let i = 0; i < poll.size; i++) {
-        pollstring += `<select name="rank${i}" form="votingForm" required>`;
-        pollstring += `<option value="#" selected="selected">Rank</option>`;
+        pollString += `<select name="rank${i}" id="rank${i}" form="votingForm" required>`;
+            pollString += `<option value="#" selected="selected">Rank</option>`;
 
         for(let j = 0; j < poll.size; j++) {
-          pollstring += `<option value="${j}">${j}</option>`;
+          pollString += `<option value="${j}">${j}</option>`;
         }
 
-        pollstring += `</select>`;
+        pollString += `</select>`;
       }
 
       // <form action="" id="votingForm">
@@ -206,10 +210,35 @@
       // </form>
 
       pollString += `<button id="castVote" type="button">Cast Vote</button></form>`;
-      pollDisplay.appendChild(pollString);
+      pollDisplay.innerHTML = pollString;
 
-      // $(function() {
-      //   $('select').on('change', (e) => { // This binds listeners to the change event on all the select elements
+      const votingFormChildren = document.querySelector("#votingForm").childNodes;
+
+      for(let select of votingFormChildren){
+        select.addEventListener('change', (e) => { // This binds listeners to the change event on all the select elements
+          var sId = select.id; // store off the changed element id
+          var vId = select.value; // store off the changed element value 
+
+          console.log("changed: id=" + sId + " value=" + vId);
+          
+          const selects = document.querySelector("#votingForm");
+
+          for(let sel of selects){
+            if(sel.id != sId && sel.value == vId) { // If it is not the triggering element and the value is the same, do something
+              
+              sel.options.selectedIndex = 0; // reset the value to 'rank' 
+            }
+          }
+
+          // select.each( (e) => { // this loops across the same set of elements
+          //     if(select.id != sId && select.value == vId) { // If it is not the triggering element and the value is the same, do something
+          //       select.options.selectedIndex = 0; // reset the value to 'rank' 
+          //     }
+          // });
+        });
+      }
+
+      // $('select').on('change', (e) => { // This binds listeners to the change event on all the select elements
       //         var sId = this.id; // store off the changed element id
       //         var vId = this.value; // store off the changed element value 
       //         $('select').each( () => { // this loops across the same set of elements
@@ -219,6 +248,9 @@
       //         });
       //     });
       // });
+
+      const castVoteButton = document.querySelector("#castVote");
+      castVoteButton.addEventListener("click", castVote);
     };
 
     // Attach listeners to elements
@@ -228,7 +260,6 @@
       const createPollButton = document.querySelector("#createPoll");
       const addOptionButton = document.querySelector("#addOption");
       const removeOptionButton = document.querySelector("#removeOption");
-      const castVoteButton = document.querySelector("#castVote");
 
       const addPoll = (e) => sendPost(e, pollForm);
       const getPolls = (e) => sendGet(e);
@@ -236,7 +267,6 @@
       createPollButton.addEventListener("click", addPoll);
       addOptionButton.addEventListener("click", addOption);
       removeOptionButton.addEventListener("click", removeOption);
-      getPollsButton.addEventListener("click", castVote);
 
       getPolls();
     };
@@ -269,10 +299,7 @@
       <table id="pollTable"></table>
     </div>
     
-    <div id="pollDisplay">
-      <h2 id="pollName">Poll Name</h2>
-
-      
+    <div id="pollDisplay">      
     </div>
 
     <p id="contentMessage"></p>
