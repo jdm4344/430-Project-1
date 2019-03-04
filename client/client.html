@@ -112,7 +112,6 @@
     // method determins GET/HEAD request
     // pollName is an optional parameter for retreiving a specific poll's data
     const sendGet = (e, method="get", action="/getPolls", pollName) => {    
-      console.log(action);
       const xhr = new XMLHttpRequest();
       
       // Handle retrieving a specific poll

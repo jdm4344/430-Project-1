@@ -3,7 +3,8 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
-  
+  background-color: #243B4A;
+  color: #87BCDE;
 }
 
 #forms {
@@ -13,6 +14,9 @@ html, body {
 
 #forms h1 {
   font-size: 2em;
+  padding-left: 1em;
+  padding-right: 1em;
+  outline: 0.2em dashed #2D4654;
 }
 
 #content {
@@ -36,18 +40,19 @@ ul {
 
 th{
   padding: 0.25em;
-  outline: 2px solid black;
+  outline: 2px solid #BFB6BB;
 }
 
 td{
-  outline: 2px solid black;
+  outline: 2px solid #BFB6BB;
   padding: 0.15em;
+  background-color: #2D4654;
 }
 
 #pollDisplay{
   margin: 10%;
-  outline: 2px solid black;
-  min-height: 3em; /* REMOVE THIS */
+  outline: 2px solid #BFB6BB;
+  min-height: 3em;
 }
 
 #submittedVotes{
@@ -60,4 +65,8 @@ td{
   margin: 0 auto;
   margin-top: 1em;
   display: block;
+}
+
+input{
+  background-color: #BFB6BB;
 }

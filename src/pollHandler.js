@@ -62,7 +62,7 @@ const castVote = (name, votes) => {
   const votesArr = votes.split(',');
 
   if (polls[name]) {
-    if (polls[name].votes === null) {
+    if (polls[name].votes === null || polls[name].votes === [] || polls[name].votes === undefined) {
       console.dir('does not exist');
       polls[name].votes = [];
       for (let i = 0; i < polls[name].size; i++) {
